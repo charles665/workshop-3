@@ -1,0 +1,452 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Workshop 3 · Streaming ETL y predicción",
+    "locale": "es",
+    "output": ".archify/dataflow-happiness-etl-20261114-101238/happiness-etl.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/charles665/workshop-3",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "535d6ff0f697a6bd4dad0ebb0aa10041f48f4300"
+    },
+    "views": [
+      {
+        "id": "batch",
+        "label": "Preparación batch",
+        "focus": [
+          "historicos",
+          "perfilado",
+          "dataset",
+          "entrenamiento",
+          "modelo"
+        ]
+      },
+      {
+        "id": "streaming",
+        "label": "Streaming e inferencia",
+        "focus": [
+          "productor",
+          "kafka",
+          "consumidor",
+          "validacion",
+          "inferencia"
+        ]
+      },
+      {
+        "id": "analytics",
+        "label": "Persistencia y BI",
+        "focus": [
+          "rawdb",
+          "factdb",
+          "vistas",
+          "powerbi"
+        ]
+      }
+    ]
+  },
+  "stages": [
+    {
+      "label": "Fuentes históricas"
+    },
+    {
+      "label": "Preparación batch"
+    },
+    {
+      "label": "Publicación Kafka"
+    },
+    {
+      "label": "Consumo e inferencia"
+    },
+    {
+      "label": "Analítica y BI"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "historicos",
+      "type": "database",
+      "label": "CSV World Happiness",
+      "sublabel": "2015–2019 · data/raw",
+      "stage": 0,
+      "row": 0,
+      "sources": [
+        {
+          "path": "README.md",
+          "line": 24,
+          "end_line": 26
+        }
+      ]
+    },
+    {
+      "id": "perfilado",
+      "type": "backend",
+      "label": "EDA y armonización",
+      "sublabel": "limpieza · esquema común",
+      "stage": 1,
+      "row": 0,
+      "sources": [
+        {
+          "path": "notebooks/eda.ipynb",
+          "line": 13
+        },
+        {
+          "path": "README.md",
+          "line": 74,
+          "end_line": 108
+        }
+      ]
+    },
+    {
+      "id": "dataset",
+      "type": "database",
+      "label": "Dataset unificado",
+      "sublabel": "happiness_unified.csv · 782 filas",
+      "stage": 1,
+      "row": 1,
+      "sources": [
+        {
+          "path": "notebooks/eda.ipynb",
+          "line": 2234,
+          "end_line": 2235
+        },
+        {
+          "path": "README.md",
+          "line": 74,
+          "end_line": 108
+        }
+      ]
+    },
+    {
+      "id": "entrenamiento",
+      "type": "backend",
+      "label": "Entrenamiento ML",
+      "sublabel": "6 variables · 70/30",
+      "stage": 1,
+      "row": 2,
+      "sources": [
+        {
+          "path": "notebooks/model_training.ipynb",
+          "line": 581,
+          "end_line": 598
+        },
+        {
+          "path": "README.md",
+          "line": 118,
+          "end_line": 123
+        }
+      ]
+    },
+    {
+      "id": "productor",
+      "type": "backend",
+      "label": "Productor Python",
+      "sublabel": "JSON · key = country",
+      "stage": 2,
+      "row": 0,
+      "sources": [
+        {
+          "path": "kafka/producer.py",
+          "line": 54,
+          "end_line": 68
+        },
+        {
+          "path": "kafka/producer.py",
+          "line": 191,
+          "end_line": 217
+        }
+      ]
+    },
+    {
+      "id": "kafka",
+      "type": "messagebus",
+      "label": "happiness-events",
+      "sublabel": "3 particiones · RF 1",
+      "stage": 2,
+      "row": 1,
+      "sources": [
+        {
+          "path": "docker-compose.yml",
+          "line": 42,
+          "end_line": 64
+        }
+      ]
+    },
+    {
+      "id": "modelo",
+      "type": "database",
+      "label": "Modelo ML",
+      "sublabel": "models/model.pkl",
+      "stage": 2,
+      "row": 2,
+      "sources": [
+        {
+          "path": "README.md",
+          "line": 61
+        },
+        {
+          "path": "README.md",
+          "line": 123
+        }
+      ]
+    },
+    {
+      "id": "consumidor",
+      "type": "backend",
+      "label": "Consumidor Kafka",
+      "sublabel": "grupo happiness-ml-team",
+      "stage": 3,
+      "row": 0,
+      "sources": [
+        {
+          "path": "kafka/consumer.py",
+          "line": 384,
+          "end_line": 415
+        }
+      ]
+    },
+    {
+      "id": "validacion",
+      "type": "security",
+      "label": "Validar contrato",
+      "sublabel": "campos · tipos · valores",
+      "stage": 3,
+      "row": 1,
+      "sources": [
+        {
+          "path": "kafka/consumer.py",
+          "line": 98,
+          "end_line": 164
+        }
+      ]
+    },
+    {
+      "id": "inferencia",
+      "type": "backend",
+      "label": "Predecir score",
+      "sublabel": "features ordenadas · score",
+      "stage": 3,
+      "row": 2,
+      "sources": [
+        {
+          "path": "kafka/consumer.py",
+          "line": 394,
+          "end_line": 400
+        },
+        {
+          "path": "kafka/consumer.py",
+          "line": 513,
+          "end_line": 546
+        }
+      ]
+    },
+    {
+      "id": "rawdb",
+      "type": "database",
+      "label": "Eventos crudos",
+      "sublabel": "mensaje original · estado",
+      "stage": 4,
+      "row": 0,
+      "sources": [
+        {
+          "path": "kafka/consumer.py",
+          "line": 192,
+          "end_line": 230
+        },
+        {
+          "path": "sql/create_tables.sql",
+          "line": 14,
+          "end_line": 42
+        }
+      ]
+    },
+    {
+      "id": "factdb",
+      "type": "database",
+      "label": "Modelo analítico",
+      "sublabel": "país · fecha · predicción",
+      "stage": 4,
+      "row": 2,
+      "sources": [
+        {
+          "path": "kafka/consumer.py",
+          "line": 304,
+          "end_line": 353
+        },
+        {
+          "path": "sql/create_tables.sql",
+          "line": 51,
+          "end_line": 95
+        }
+      ]
+    },
+    {
+      "id": "vistas",
+      "type": "backend",
+      "label": "Vistas SQL de KPI",
+      "sublabel": "error · país · score · tendencias",
+      "stage": 4,
+      "row": 3,
+      "sources": [
+        {
+          "path": "sql/views_bi.sql",
+          "line": 11,
+          "end_line": 118
+        }
+      ]
+    },
+    {
+      "id": "powerbi",
+      "type": "frontend",
+      "label": "Dashboard Power BI",
+      "sublabel": "happiness_dashboard.pbix",
+      "stage": 4,
+      "row": 4,
+      "sources": [
+        {
+          "path": "dashboards/POWER_BI_GUIDE.md",
+          "line": 1,
+          "end_line": 14
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "csv-eda",
+      "from": "historicos",
+      "to": "perfilado",
+      "label": "CSV 2015–19",
+      "variant": "default"
+    },
+    {
+      "id": "eda-dataset",
+      "from": "perfilado",
+      "to": "dataset",
+      "label": "datos unificados",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dataset-train",
+      "from": "dataset",
+      "to": "entrenamiento",
+      "label": "6 features",
+      "variant": "default"
+    },
+    {
+      "id": "dataset-producer",
+      "from": "dataset",
+      "to": "productor",
+      "label": "registros JSON",
+      "variant": "default"
+    },
+    {
+      "id": "train-model",
+      "from": "entrenamiento",
+      "to": "modelo",
+      "label": "Pipeline sklearn",
+      "variant": "emphasis"
+    },
+    {
+      "id": "producer-kafka",
+      "from": "productor",
+      "to": "kafka",
+      "label": "JSON · key país",
+      "variant": "emphasis"
+    },
+    {
+      "id": "kafka-consumer",
+      "from": "kafka",
+      "to": "consumidor",
+      "label": "eventos",
+      "variant": "dashed"
+    },
+    {
+      "id": "consumer-raw",
+      "from": "consumidor",
+      "to": "rawdb",
+      "label": "INSERT primero",
+      "variant": "security"
+    },
+    {
+      "id": "consumer-validate",
+      "from": "consumidor",
+      "to": "validacion",
+      "label": "luego valida",
+      "variant": "default"
+    },
+    {
+      "id": "invalid-raw",
+      "from": "validacion",
+      "to": "rawdb",
+      "label": "INVALID_*",
+      "variant": "security"
+    },
+    {
+      "id": "valid-infer",
+      "from": "validacion",
+      "to": "inferencia",
+      "label": "contrato válido",
+      "variant": "emphasis"
+    },
+    {
+      "id": "model-infer",
+      "from": "modelo",
+      "to": "inferencia",
+      "label": "modelo cargado",
+      "variant": "default"
+    },
+    {
+      "id": "infer-fact",
+      "from": "inferencia",
+      "to": "factdb",
+      "label": "score + error",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fact-views",
+      "from": "factdb",
+      "to": "vistas",
+      "label": "consultas SQL",
+      "variant": "default"
+    },
+    {
+      "id": "views-dashboard",
+      "from": "vistas",
+      "to": "powerbi",
+      "label": "4 KPI",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Dos ritmos, un esquema",
+      "items": [
+        "El proceso batch armoniza los CSV y entrena un regresor lineal reproducible.",
+        "El proceso online simula eventos históricos; no es una fuente de datos en vivo.",
+        "actual_happiness_score sirve para evaluar el resultado, nunca como feature del modelo."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Trazabilidad y resiliencia",
+      "items": [
+        "Cada mensaje se conserva antes de validar; los inválidos quedan registrados y se omiten de la predicción.",
+        "Las predicciones válidas enlazan raw_event_id con dimensiones de país y fecha.",
+        "El consumidor asigna PREDICTION_ERROR si falla la inferencia o persistencia."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Estado de entregables",
+      "items": [
+        "El PDF pide dashboard conectado a la base y capturas de pantalla.",
+        "El proyecto contiene happiness_dashboard.pbix, pero Git lo muestra sin seguimiento.",
+        "No se encontraron capturas en dashboards/; README las deja pendientes tras ejecutar el flujo end-to-end."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "37bf449b-0dd7-4509-abf4-e2c82fc1e8a5",
+  "status": "current",
+  "command": "deliver",
+  "type": "dataflow",
+  "input": "C:\\Users\\jagui\\Desktop\\UNIVERSIDAD\\ETL\\workshop_3\\.archify\\dataflow-happiness-etl-20261114-101238\\candidate.json",
+  "output": "C:\\Users\\jagui\\Desktop\\UNIVERSIDAD\\ETL\\workshop_3\\.archify\\dataflow-happiness-etl-20261114-101238\\happiness-etl.html",
+  "specification": {
+    "sha256": "9a11dc0676e1ab860f204c9a641ec3e3683f7f7377f77656c4132e1a7e2768ce",
+    "bytes": 10482
+  },
+  "artifact": {
+    "sha256": "cad3b9145fd6b61755902a8f399afe75090519066e04c865152499515f5f9a48",
+    "bytes": 835517
+  }
+}
