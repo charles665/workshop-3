@@ -1,0 +1,21 @@
+{
+  "model_type": "Linear Regression",
+  "sklearn_version": "1.9.1",
+  "feature_order": [
+    "gdp",
+    "family",
+    "health",
+    "freedom",
+    "generosity",
+    "corruption"
+  ],
+  "target_column": "happiness_score",
+  "train_rows": 547,
+  "test_rows": 235,
+  "test_metrics": {
+    "mae": 0.42876,
+    "rmse": 0.553805,
+    "r2": 0.759946
+  },
+  "trained_at_utc": "2026-11-11T04:29:43.242904+00:00"
+}

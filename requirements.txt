@@ -1,0 +1,19 @@
+# Data & Machine Learning
+pandas>=2.2.0
+numpy>=2.0.0
+scikit-learn>=1.6.0
+joblib>=1.4.0
+matplotlib>=3.9.0
+seaborn>=0.13.0
+
+# Notebooks
+jupyter>=1.1.0
+ipykernel>=6.29.0
+
+# Apache Kafka (confluent-kafka supports Python 3.13 natively via pre-built wheels)
+confluent-kafka>=2.6.0
+
+# Database & Validation / Configuration
+psycopg2-binary>=2.9.9
+pydantic>=2.9.0
+python-dotenv>=1.0.1
